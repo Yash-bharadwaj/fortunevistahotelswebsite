@@ -40,14 +40,22 @@
 }
 
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%; scroll-behavior:smooth; scroll-padding-top:86px; overflow-x:clip}
+html{-webkit-text-size-adjust:100%; scroll-behavior:smooth; overflow-x:clip;
+  /* anchors land clear of the real header, and clear of the real dock. Both
+     heights are measured and published by main.js; the literals are fallbacks. */
+  scroll-padding-top:calc(var(--navh, 86px) + 12px);
+  scroll-padding-bottom:var(--dockh, 0px)}
 @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
 body{
   margin:0; background:var(--cream); color:var(--ink);
-  font-family:var(--f-ui); font-size:17px; line-height:1.65;
+  font-family:var(--f-ui); font-size:1.0625rem; line-height:1.65;
+  /* rem, not px, so the page honours the reader's browser / OS text size.
+     break-word stops one long token from widening a grid track. */
+  overflow-wrap:break-word;
   -webkit-font-smoothing:antialiased; overflow-x:clip;
 }
 img{max-width:100%; height:auto; display:block}
+svg, video, iframe, canvas{max-width:100%}
 a{color:inherit; text-decoration:none}
 h1,h2,h3,h4{font-family:var(--f-dis); font-weight:600; line-height:1.14; margin:0; letter-spacing:-.018em;
   font-variation-settings:"SOFT" 0, "WONK" 0}
@@ -77,7 +85,8 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
   display:inline-flex; align-items:center; justify-content:center; gap:9px;
   font-family:var(--f-ui); font-size:.94rem; font-weight:650; letter-spacing:.01em;
   padding:12px 20px; border-radius:999px; border:1.5px solid transparent;
-  cursor:pointer; white-space:nowrap; transition:transform .2s var(--ease), box-shadow .2s var(--ease), background .2s, color .2s, border-color .2s;
+  cursor:pointer; min-width:0; max-width:100%; text-align:center;
+  transition:transform .2s var(--ease), box-shadow .2s var(--ease), background .2s, color .2s, border-color .2s;
 }
 .btn:hover{transform:translateY(-2px)}
 .btn:active{transform:translateY(0)}
@@ -101,7 +110,7 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 
 /* ---------- topbar + nav ---------- */
 .topbar{background:var(--navy-900); color:#C6CEDD; font-size:.8rem}
-.topbar__in{display:flex; align-items:center; gap:12px; height:38px}
+.topbar__in{display:flex; align-items:center; gap:12px; min-height:38px; padding-block:4px}
 .topbar__badge{background:var(--gold); color:#2A1D00; font-weight:750; font-size:.68rem;
   letter-spacing:.08em; text-transform:uppercase; padding:3px 10px; border-radius:999px}
 .topbar__txt{flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap}
@@ -115,7 +124,8 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
    which breaks the mobile drawer. Desktop only, where there is no fixed child. */
 @media(min-width:981px){.nav{backdrop-filter:saturate(1.6) blur(12px)}}
 .nav.is-stuck{box-shadow:0 6px 24px rgba(16,33,69,.09)}
-.nav__in{display:flex; align-items:center; justify-content:space-between; gap:18px; height:72px}
+.nav__in{display:flex; align-items:center; justify-content:space-between; gap:18px;
+  min-height:72px; padding-block:8px}
 .nav__brand img{height:40px; width:auto}
 @media(min-width:900px){.nav__brand img{height:46px}}
 .nav__links{display:flex; align-items:center; gap:26px}
@@ -154,7 +164,7 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 
 /* ---------- hero ---------- */
 .hero{position:relative; min-height:clamp(540px,84svh,760px); display:flex; align-items:flex-end;
-  padding:120px 0 72px; overflow:hidden; isolation:isolate}
+  padding:clamp(96px,14vw,140px) 0 clamp(56px,8vw,80px); overflow:hidden; isolation:isolate}
 .hero__slides{position:absolute; inset:0; z-index:-2; background:var(--navy-900)}
 .hero__bg{position:absolute; inset:0; opacity:0; transition:opacity 1.1s var(--ease)}
 .hero__bg.is-on{opacity:1}
@@ -179,7 +189,7 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 .hero__sub{margin:20px 0 30px; font-size:clamp(1.02rem,1.5vw,1.2rem); color:#E4E9F2; max-width:62ch; line-height:1.6}
 .hero__cta{display:flex; flex-wrap:wrap; gap:13px}
 .hero__chips{display:flex; flex-wrap:wrap; gap:9px; margin-top:34px}
-.hero__chips li{display:inline-flex; align-items:center; gap:8px; font-size:.84rem; font-weight:600;
+.hero__chips li{display:inline-flex; align-items:center; gap:8px; max-width:100%; font-size:.84rem; font-weight:600;
   color:#EDF1F7; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.2);
   padding:8px 15px; border-radius:999px; backdrop-filter:blur(6px)}
 .hero__chips .ic{width:16px; height:16px; color:var(--gold-300)}
@@ -197,7 +207,8 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 
 /* ---------- quick cards ---------- */
 .quick{margin-top:-62px; position:relative; z-index:5; padding-bottom:0}
-.quick__grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(230px,1fr)); gap:16px}
+.quick__grid{display:grid; gap:16px;
+  grid-template-columns:repeat(auto-fit, minmax(min(230px, 100%), 1fr))}
 .qcard{background:#fff; border:1px solid var(--line); border-radius:var(--r-lg); padding:26px 22px 22px;
   box-shadow:var(--sh-1); transition:transform .28s var(--ease), box-shadow .28s var(--ease), border-color .28s}
 .qcard:hover{transform:translateY(-6px); box-shadow:var(--sh-2); border-color:var(--gold-300)}
@@ -211,7 +222,7 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 
 /* ---------- about ---------- */
 .about{display:grid; gap:clamp(34px,5vw,64px); align-items:center}
-@media(min-width:900px){.about{grid-template-columns:1fr 1.05fr}}
+@media(min-width:900px){.about{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr)}}
 .about__media{position:relative}
 .about__media img{border-radius:var(--r-lg); box-shadow:var(--sh-2); aspect-ratio:4/3; object-fit:cover; width:100%}
 .about__stat{position:absolute; right:-10px; bottom:-22px; background:var(--navy); color:#fff;
@@ -223,8 +234,8 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 .about__body h2{margin-bottom:18px}
 .about__body > p{color:var(--muted)}
 
-.ticks{display:grid; gap:16px; margin:26px 0 30px}
-.ticks li{display:flex; gap:13px; align-items:flex-start}
+.ticks{display:grid; grid-template-columns:minmax(0,1fr); gap:16px; margin:26px 0 30px}
+.ticks li{display:flex; gap:13px; align-items:flex-start; min-width:0; overflow-wrap:anywhere}
 .ticks .ic{width:21px; height:21px; color:var(--gold); margin-top:3px}
 .ticks strong{display:block; font-size:.98rem; font-weight:680}
 .ticks span{display:block; font-size:.9rem; color:var(--muted); line-height:1.5}
@@ -254,7 +265,10 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 .carousel__dots button.is-on{width:22px; border-radius:4px; background:var(--gold-300)}
 
 /* ---------- rooms ---------- */
-.rooms{display:grid; gap:24px; grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+/* min() keeps the 300px floor from exceeding the container on a 320px phone,
+   where it used to force a 300px track into 288px of room. */
+.rooms{display:grid; gap:24px;
+  grid-template-columns:repeat(auto-fit, minmax(min(300px, 100%), 1fr))}
 .room{background:#fff; border:1px solid var(--line); border-radius:var(--r-lg); overflow:hidden;
   display:flex; flex-direction:column; box-shadow:var(--sh-1);
   transition:transform .3s var(--ease), box-shadow .3s var(--ease)}
@@ -269,9 +283,10 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 .room__body{padding:24px 22px 22px; display:flex; flex-direction:column; flex:1}
 .room__body h3{margin-bottom:9px}
 .room__desc{font-size:.93rem; color:var(--muted); margin-bottom:18px}
-.room__feat{display:grid; grid-template-columns:1fr 1fr; gap:10px 12px; padding-bottom:20px;
+.room__feat{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:10px 12px; padding-bottom:20px;
   border-bottom:1px solid var(--line); margin-bottom:18px}
-.room__feat li{display:flex; align-items:center; gap:8px; font-size:.85rem; font-weight:560; color:var(--ink)}
+.room__feat li{display:flex; align-items:center; gap:8px; min-width:0; overflow-wrap:anywhere;
+  font-size:.85rem; font-weight:560; color:var(--ink)}
 .room__feat .ic{width:16px; height:16px; color:var(--gold)}
 .room__foot{margin-top:auto}
 .price{display:flex; align-items:baseline; gap:3px; margin:0 0 16px; font-family:var(--f-dis)}
@@ -279,7 +294,7 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 .price strong{font-size:2.15rem; font-weight:700; color:var(--navy); line-height:1}
 .price__unit{font-family:var(--f-ui); font-size:.78rem; color:var(--muted); font-weight:500; margin-left:6px}
 .room__btns{display:flex; gap:9px}
-.room__btns .btn{flex:1; padding:12px 10px; font-size:.88rem}
+.room__btns .btn{flex:1 1 0; min-width:0; padding:12px 10px; font-size:.88rem}
 
 .rooms__note{display:flex; align-items:center; justify-content:center; gap:10px; margin:34px auto 0;
   font-size:.9rem; color:var(--muted); background:#fff; border:1px dashed var(--line);
@@ -287,7 +302,12 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 .rooms__note .ic{width:17px; height:17px; color:var(--gold); fill:var(--gold-300)}
 
 /* booking / enquiry fields that prefill the WhatsApp message */
-.bk{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:0 0 18px}
+/* Capped auto-fit, max 2 columns: the floor is whichever is larger, 8.5rem or
+   half the row. So the fields drop to one column when the reader's text gets
+   big OR the card gets narrow -- which a max-width breakpoint could not do --
+   and never spread past two columns in a wide panel. */
+.bk{display:grid; gap:10px; margin:0 0 18px;
+  grid-template-columns:repeat(auto-fit, minmax(max(8.5rem, (100% - 10px)/2), 1fr))}
 .bk__f{display:flex; flex-direction:column; gap:5px; min-width:0}
 .bk__f--wide{grid-column:1 / -1}
 .bk__f > span{font-size:.7rem; font-weight:750; letter-spacing:.11em;
@@ -332,20 +352,25 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 /* make the native date picker icon visible on dark */
 .bk--dark input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.75)}
 
-@media(max-width:380px){.bk{grid-template-columns:1fr}}
 
 /* ---------- amenities ---------- */
-.amen{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:42px}
-@media(min-width:620px){.amen{grid-template-columns:repeat(3,1fr)}}
-@media(min-width:960px){.amen{grid-template-columns:repeat(4,1fr)}}
-.amen li{display:flex; align-items:center; gap:12px; background:#fff; border:1px solid var(--line);
+/* Capped auto-fit: the track floor is whichever is larger, 130px or the width
+   a 4-column row would give. So it never exceeds 4 columns and never forces a
+   track wider than its share -- repeat(2,1fr) did, because 1fr's floor is
+   min-content, and "Air conditioning" pushed the row 19px past the gutter. */
+.amen{display:grid; gap:12px; margin-bottom:42px;
+  grid-template-columns:repeat(auto-fit, minmax(max(130px, (100% - 36px)/4), 1fr))}
+/* anywhere (not break-word) also lowers min-content, which is what lets the
+   anonymous text item beside the icon shrink instead of spilling out. */
+.amen li{display:flex; align-items:center; gap:12px; min-width:0; overflow-wrap:anywhere;
+  background:#fff; border:1px solid var(--line);
   border-radius:var(--r); padding:15px 16px; font-size:.9rem; font-weight:560;
   transition:border-color .25s, transform .25s var(--ease)}
 .amen li:hover{border-color:var(--gold-300); transform:translateY(-3px)}
 .amen .ic{width:21px; height:21px; color:var(--gold)}
 
-.strip{display:grid; grid-template-columns:repeat(6,1fr); gap:12px}
-@media(max-width:860px){.strip{grid-template-columns:repeat(3,1fr)}}
+.strip{display:grid; gap:12px;
+  grid-template-columns:repeat(auto-fit, minmax(max(88px, (100% - 60px)/6), 1fr))}
 .strip__it{margin:0; position:relative; border-radius:var(--r); overflow:hidden; cursor:zoom-in;
   box-shadow:var(--sh-1)}
 .strip__it img{aspect-ratio:1; object-fit:cover; width:100%; transition:transform .5s var(--ease)}
@@ -357,7 +382,7 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 /* ---------- banquet ---------- */
 .banquet{display:grid; gap:26px}
 @media(min-width:960px){
-  .banquet{grid-template-columns:1.45fr 1fr; align-items:stretch}
+  .banquet{grid-template-columns:minmax(0,1.45fr) minmax(0,1fr); align-items:stretch}
   .banquet__hero, .banquet__hero .carousel{height:100%}
   .banquet__hero .carousel__track, .banquet__hero .carousel__slide{height:100%}
   .carousel--big .carousel__slide img{height:100%; aspect-ratio:auto; min-height:430px}
@@ -371,7 +396,7 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 .banquet__cap span{font-size:.78rem; letter-spacing:.08em; text-transform:uppercase; color:#A9B5C9}
 .banquet__side h3{font-size:1.1rem; margin-bottom:4px}
 .banquet__events{display:flex; flex-wrap:wrap; gap:7px; margin:0 0 22px}
-.banquet__events span{font-size:.78rem; font-weight:600; color:#DCE3EE; background:rgba(255,255,255,.1);
+.banquet__events span{max-width:100%; font-size:.78rem; font-weight:600; color:#DCE3EE; background:rgba(255,255,255,.1);
   border:1px solid rgba(255,255,255,.16); padding:6px 12px; border-radius:999px}
 .banquet__btns{display:flex; flex-wrap:wrap; gap:10px}
 .banquet__btns .btn{flex:1 1 auto}
@@ -379,11 +404,11 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 
 /* ---------- catering ---------- */
 .catering{display:grid; gap:clamp(30px,5vw,58px); align-items:center}
-@media(min-width:900px){.catering{grid-template-columns:1.1fr .9fr}}
+@media(min-width:900px){.catering{grid-template-columns:minmax(0,1.1fr) minmax(0,.9fr)}}
 .catering__body h2{margin-bottom:16px; font-size:clamp(1.5rem,3vw,2.2rem)}
 .catering__body > p{color:var(--muted)}
 .catering__pills{display:flex; flex-wrap:wrap; gap:9px; margin:22px 0 26px}
-.catering__pills li{display:inline-flex; align-items:center; gap:8px; font-size:.85rem; font-weight:600;
+.catering__pills li{display:inline-flex; align-items:center; gap:8px; max-width:100%; font-size:.85rem; font-weight:600;
   background:#fff; border:1px solid var(--line); border-radius:999px; padding:9px 15px}
 .catering__pills .ic{width:16px; height:16px; color:var(--gold)}
 .catering__btns{display:flex; flex-wrap:wrap; gap:11px}
@@ -397,21 +422,16 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 .orn{position:absolute; aspect-ratio:1; width:auto; fill:none; stroke:currentColor;
   stroke-width:1.1; stroke-linejoin:round; vector-effect:non-scaling-stroke}
 
-.o1{height:300px; top:-70px;  left:-70px;  opacity:.16; filter:blur(1.4px)}
-.o2{height:190px; top:10%;    right:6%;    opacity:.13; filter:blur(1.8px); transform:rotate(18deg)}
-.o3{height:110px; top:34%;    left:7%;     opacity:.20; filter:blur(1px)}
-.o4{height:380px; bottom:-130px; right:-110px; opacity:.14; filter:blur(2.2px)}
-.o5{height:160px; bottom:12%; left:4%;     opacity:.12; filter:blur(1.6px); transform:rotate(-12deg)}
-.o6{height:72px;  top:12%;    left:34%;    opacity:.22; filter:blur(.6px)}
-.o7{height:140px; bottom:6%;  right:30%;   opacity:.11; filter:blur(2px); transform:rotate(-24deg)}
+.o1{height:clamp(150px,24vw,300px); top:-70px;  left:-70px;  opacity:.16; filter:blur(1.4px)}
+.o2{height:clamp(110px,15vw,190px); top:10%;    right:6%;    opacity:.13; filter:blur(1.8px); transform:rotate(18deg)}
+.o3{height:clamp(70px,9vw,110px);   top:34%;    left:7%;     opacity:.20; filter:blur(1px)}
+.o4{height:clamp(170px,30vw,380px); bottom:-130px; right:-110px; opacity:.14; filter:blur(2.2px)}
+.o5{height:clamp(90px,13vw,160px);  bottom:12%; left:4%;     opacity:.12; filter:blur(1.6px); transform:rotate(-12deg)}
+.o6{height:clamp(48px,6vw,72px);    top:12%;    left:34%;    opacity:.22; filter:blur(.6px)}
+.o7{height:clamp(80px,11vw,140px);  bottom:6%;  right:30%;   opacity:.11; filter:blur(2px); transform:rotate(-24deg)}
 
-@media(max-width:900px){
-  .o1{height:200px} .o4{height:240px} .o2{height:130px}
-  .o5,.o6,.o7{display:none}
-}
-@media(max-width:560px){
-  .o1{height:150px; top:-40px; left:-50px} .o4{height:170px} .o2{display:none}
-}
+/* sizes are fluid, so this only drops the ones that crowd a phone */
+@media(max-width:700px){.o2,.o5,.o6,.o7{display:none}}
 
 /* scattered chillies behind the kitchen section */
 .sec--spice{position:relative; overflow:hidden; isolation:isolate}
@@ -422,33 +442,25 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 .chilli--green{color:#4C9A3F}
 
 /* position / size / tilt. heights in px, aspect is locked by the viewBox */
-.c1{height:165px; top:-44px;    left:-36px;  transform:rotate(-24deg); opacity:.15}
-.c2{height:125px; top:13%;      left:-46px;  transform:rotate(58deg);  opacity:.17}
-.c3{height:205px; bottom:-62px; left:3%;     transform:rotate(14deg);  opacity:.13}
-.c4{height:140px; bottom:-34px; left:45%;    transform:rotate(-66deg); opacity:.16}
-.c5{height:235px; top:-66px;    right:3%;    transform:rotate(27deg);  opacity:.14}
-.c6{height:155px; bottom:-44px; right:6%;    transform:rotate(-18deg); opacity:.17}
-.c7{height:115px; top:44%;      right:-34px; transform:rotate(74deg);  opacity:.13}
+.c1{height:clamp(96px,14vw,165px);  top:-44px;    left:-36px;  transform:rotate(-24deg); opacity:.15}
+.c2{height:clamp(70px,10vw,125px);  top:13%;      left:-46px;  transform:rotate(58deg);  opacity:.17}
+.c3{height:clamp(120px,17vw,205px); bottom:-62px; left:3%;     transform:rotate(14deg);  opacity:.13}
+.c4{height:clamp(80px,12vw,140px);  bottom:-34px; left:45%;    transform:rotate(-66deg); opacity:.16}
+.c5{height:clamp(120px,19vw,235px); top:-66px;    right:3%;    transform:rotate(27deg);  opacity:.14}
+.c6{height:clamp(92px,13vw,155px);  bottom:-44px; right:6%;    transform:rotate(-18deg); opacity:.17}
+.c7{height:clamp(66px,9vw,115px);   top:44%;      right:-34px; transform:rotate(74deg);  opacity:.13}
 
-@media(max-width:900px){
-  .c1{height:120px} .c3{height:150px} .c5{height:160px} .c6{height:110px}
-  .c4,.c7{display:none}
-}
-@media(max-width:560px){
-  .c2{display:none}
-  .c1{height:96px; left:-14px} .c3{height:120px} .c5{height:120px; right:-10px} .c6{height:92px}
-}
+/* sizes are fluid, so this only drops the ones that crowd a phone */
+@media(max-width:700px){.c2,.c4,.c7{display:none}}
 
 /* kitchen / Sampradhaya logo */
 .kitchen{display:flex; align-items:center; justify-content:center}
-.kitchen__logo{width:100%; max-width:400px; height:auto;
+.kitchen__logo{width:100%; max-width:clamp(230px, 40vw, 400px); height:auto;
   filter:drop-shadow(0 22px 46px rgba(16,33,69,.30))}
-@media(max-width:900px){.kitchen__logo{max-width:300px}}
-@media(max-width:420px){.kitchen__logo{max-width:230px}}
 
 /* ---------- gallery ---------- */
-.grid{display:grid; grid-template-columns:repeat(4,1fr); gap:14px}
-@media(max-width:860px){.grid{grid-template-columns:repeat(2,1fr)}}
+.grid{display:grid; gap:14px;
+  grid-template-columns:repeat(auto-fit, minmax(max(136px, (100% - 42px)/4), 1fr))}
 .grid__it{margin:0; position:relative; border-radius:var(--r); overflow:hidden; cursor:zoom-in;
   box-shadow:var(--sh-1); background:#EDE7DA}
 .grid__it img{width:100%; height:100%; aspect-ratio:4/3; object-fit:cover; transition:transform .55s var(--ease)}
@@ -458,9 +470,11 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 
 /* ---------- location ---------- */
 .loc{display:grid; gap:24px; margin-bottom:26px}
-@media(min-width:900px){.loc{grid-template-columns:1fr 1fr}}
-.loc__dist{display:grid; grid-template-columns:repeat(auto-fit,minmax(150px,1fr)); gap:12px; align-content:start}
+@media(min-width:900px){.loc{grid-template-columns:repeat(2, minmax(0,1fr))}}
+.loc__dist{display:grid; gap:12px; align-content:start;
+  grid-template-columns:repeat(auto-fit, minmax(min(150px, 100%), 1fr))}
 .loc__dist li{background:#fff; border:1px solid var(--line); border-radius:var(--r); padding:18px 16px;
+  min-width:0; overflow-wrap:anywhere;
   transition:border-color .25s, transform .25s var(--ease)}
 .loc__dist li:hover{border-color:var(--gold-300); transform:translateY(-3px)}
 .loc__dist strong{display:block; font-family:var(--f-dis); font-size:1.5rem; color:var(--navy); line-height:1.1}
@@ -469,10 +483,10 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 .loc__card h3{display:flex; align-items:center; gap:10px; color:#fff; margin-bottom:14px}
 .loc__card h3 .ic{color:var(--gold-300)}
 .loc__card address{font-style:normal; color:#B9C4D6; line-height:1.75; margin-bottom:20px}
-.loc__meta{display:grid; grid-template-columns:repeat(3,1fr); gap:12px; margin:0 0 22px;
+.loc__meta{display:grid; grid-template-columns:repeat(3, minmax(0,1fr)); gap:12px; margin:0 0 22px;
   padding:18px 0; border-block:1px solid rgba(255,255,255,.14)}
 .loc__meta dt{font-size:.72rem; letter-spacing:.08em; text-transform:uppercase; color:#8E9DB6; margin-bottom:3px}
-.loc__meta dd{margin:0; font-weight:650; color:#fff; font-size:.94rem}
+.loc__meta dd{margin:0; min-width:0; overflow-wrap:anywhere; font-weight:650; color:#fff; font-size:.94rem}
 .loc__btns{display:flex; flex-wrap:wrap; gap:10px}
 .loc__map{border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--sh-1); border:1px solid var(--line);
   background:#E9E3D6}
@@ -490,8 +504,10 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 
 /* ---------- footer ---------- */
 .foot{background:var(--navy-900); color:#A9B5C9; padding:clamp(48px,6vw,70px) 0 0; font-size:.92rem}
-.foot__in{display:grid; gap:34px}
-@media(min-width:800px){.foot__in{grid-template-columns:1.5fr 1fr 1.25fr}}
+.foot__in{display:grid; gap:34px; grid-template-columns:minmax(0,1fr)}
+@media(min-width:800px){
+  .foot__in{grid-template-columns:minmax(0,1.5fr) minmax(0,1fr) minmax(0,1.25fr)}
+}
 .foot h4{font-family:var(--f-ui); font-size:.74rem; font-weight:750; letter-spacing:.16em;
   text-transform:uppercase; color:var(--gold); margin:0 0 16px}
 .foot__brand img{height:58px; width:auto; margin-bottom:18px;
@@ -499,7 +515,10 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 .foot__brand p{line-height:1.7; max-width:42ch; margin:0}
 .foot__nav{display:flex; flex-direction:column; gap:10px; align-items:flex-start}
 .foot__nav a:hover{color:var(--gold-300)}
-.foot__contact a, .foot__contact p{display:flex; align-items:flex-start; gap:10px; margin:0 0 12px; line-height:1.6}
+/* anywhere, not break-word: only anywhere also shrinks min-content, which is
+   what stops the email address from widening the column. */
+.foot__contact a, .foot__contact p{display:flex; align-items:flex-start; gap:10px;
+  margin:0 0 12px; line-height:1.6; min-width:0; overflow-wrap:anywhere}
 .foot__contact .ic{width:17px; height:17px; color:var(--gold); margin-top:3px}
 .foot__contact a:hover{color:var(--gold-300)}
 .foot__hours{color:#8E9DB6}
@@ -517,14 +536,19 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 /* ---------- mobile dock ---------- */
 .dock{display:none}
 @media(max-width:720px){
-  .dock{display:grid; grid-template-columns:repeat(3,1fr); position:fixed; inset:auto 0 0 0; z-index:80;
+  .dock{display:grid; grid-template-columns:repeat(3, minmax(0,1fr));
+    position:fixed; inset:auto 0 0 0; z-index:80; max-width:100%;
     background:rgba(16,33,69,.97); backdrop-filter:blur(10px); border-top:1px solid rgba(255,255,255,.12);
     padding-bottom:env(safe-area-inset-bottom)}
-  .dock a{display:flex; flex-direction:column; align-items:center; gap:4px; padding:11px 4px 10px;
-    color:#DCE3EE; font-size:.7rem; font-weight:650}
+  .dock a{display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:4px; min-width:0; text-align:center;
+    padding:clamp(9px,2.4vw,12px) 4px clamp(8px,2.2vw,11px);
+    overflow-wrap:anywhere;
+    color:#DCE3EE; font-size:clamp(.64rem, 2.6vw, .72rem); font-weight:650}
   .dock a:active{background:rgba(255,255,255,.08)}
   .dock .ic{width:20px; height:20px; color:var(--gold-300)}
-  body{padding-bottom:66px}
+  /* reserve exactly the dock's measured height, not a guessed 66px */
+  body{padding-bottom:var(--dockh, 66px)}
   .foot__bar{margin-bottom:4px}
 }
 

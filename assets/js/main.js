@@ -15,6 +15,23 @@
     document.documentElement.style.setProperty(
       '--navh', Math.round(nav.getBoundingClientRect().bottom) + 'px');
   };
+
+  /* The bottom dock is taller when the reader has a larger text size, so the
+     space the page reserves for it has to be measured, not assumed. It is
+     display:none above 720px, where this reports 0 and reserves nothing. */
+  var dock = $('.dock');
+  var setDockH = function () {
+    document.documentElement.style.setProperty(
+      '--dockh', Math.round(dock ? dock.getBoundingClientRect().height : 0) + 'px');
+  };
+  setDockH();
+  window.addEventListener('resize', setDockH);
+  window.addEventListener('orientationchange', setDockH);
+  if (dock && window.ResizeObserver) new ResizeObserver(setDockH).observe(dock);
+  /* a late webfont changes both heights */
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(function () { setDockH(); setNavH(); });
+  }
   var onScroll = function () {
     nav.classList.toggle('is-stuck', window.scrollY > 8);
     setNavH();
