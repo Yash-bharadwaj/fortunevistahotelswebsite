@@ -286,6 +286,54 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
   border-radius:999px; padding:13px 24px; width:fit-content; max-width:100%; text-align:center}
 .rooms__note .ic{width:17px; height:17px; color:var(--gold); fill:var(--gold-300)}
 
+/* booking / enquiry fields that prefill the WhatsApp message */
+.bk{display:grid; grid-template-columns:1fr 1fr; gap:10px; margin:0 0 18px}
+.bk__f{display:flex; flex-direction:column; gap:5px; min-width:0}
+.bk__f--wide{grid-column:1 / -1}
+.bk__f > span{font-size:.7rem; font-weight:750; letter-spacing:.11em;
+  text-transform:uppercase; color:var(--muted)}
+.bk input, .bk select{
+  width:100%; min-width:0; font-family:var(--f-ui); font-size:.92rem; font-weight:560;
+  color:var(--ink); background:#fff; border:1.5px solid var(--line); border-radius:10px;
+  padding:10px 12px; appearance:none; -webkit-appearance:none; transition:border-color .2s, box-shadow .2s;
+}
+.bk input[type="date"]{min-height:42px}
+.bk select{
+  background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%235F6672' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 12px center; background-size:11px;
+  padding-right:32px;
+}
+.bk input:focus, .bk select:focus{outline:none; border-color:var(--gold);
+  box-shadow:0 0 0 3px rgba(200,153,46,.18)}
+.bk__chk{flex-direction:row; align-items:center; gap:9px}
+.bk__chk input[type="checkbox"]{width:18px; height:18px; flex:0 0 auto; padding:0;
+  appearance:auto; -webkit-appearance:checkbox; accent-color:var(--gold);
+  background:none; border:0; border-radius:0}
+.bk__chk > span{font-size:.84rem; font-weight:560; letter-spacing:0;
+  text-transform:none; color:var(--ink)}
+
+.price__calc{margin:-8px 0 14px; font-size:.82rem; font-weight:650; color:var(--navy);
+  background:var(--gold-50); border:1px solid rgba(200,153,46,.3);
+  border-radius:8px; padding:8px 12px}
+.price__calc[hidden]{display:none}
+
+/* on navy backgrounds */
+.bk--dark{margin-bottom:20px}
+.bk--dark .bk__f > span{color:#A9B5C9}
+.bk--dark input, .bk--dark select{
+  background:rgba(255,255,255,.08); border-color:rgba(255,255,255,.2); color:#fff}
+.bk--dark select{
+  background-image:url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' fill='none' stroke='%23A9B5C9' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 12px center; background-size:11px}
+.bk--dark input:focus, .bk--dark select:focus{border-color:var(--gold-300);
+  box-shadow:0 0 0 3px rgba(230,197,114,.22)}
+.bk--dark .bk__chk > span{color:#DCE3EE}
+.bk--dark option{color:var(--ink)}
+/* make the native date picker icon visible on dark */
+.bk--dark input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(1) opacity(.75)}
+
+@media(max-width:380px){.bk{grid-template-columns:1fr}}
+
 /* ---------- amenities ---------- */
 .amen{display:grid; grid-template-columns:repeat(2,1fr); gap:12px; margin-bottom:42px}
 @media(min-width:620px){.amen{grid-template-columns:repeat(3,1fr)}}

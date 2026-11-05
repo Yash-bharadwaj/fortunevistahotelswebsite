@@ -203,6 +203,132 @@
     });
   });
 
+  /* ---------- WhatsApp enquiries, prefilled from what the visitor picked ----------
+     Every wa.me link keeps a plain href in the HTML, so if any of this fails
+     the button still opens a chat. We only enrich it on click. */
+  (function () {
+    var WA = 'https://wa.me/919640612413?text=';
+    var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+    function prettyDate(iso) {
+      if (!iso) return '';
+      var p = iso.split('-');
+      if (p.length !== 3) return iso;
+      return Number(p[2]) + ' ' + MONTHS[Number(p[1]) - 1] + ' ' + p[0];
+    }
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    function addDays(iso, n) {
+      if (!iso) return '';
+      var d = new Date(iso + 'T12:00:00');
+      if (isNaN(d.getTime())) return '';
+      d.setDate(d.getDate() + n);
+      return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+    }
+    function money(n) { return '₹' + Number(n).toLocaleString('en-IN'); }
+    function send(el, lines) {
+      var txt = [];
+      for (var i = 0; i < lines.length; i++) {
+        if (lines[i] !== false && lines[i] !== null && lines[i] !== undefined) txt.push(lines[i]);
+      }
+      el.setAttribute('href', WA + encodeURIComponent(txt.join('\n')));
+    }
+
+    /* no past dates */
+    var t = new Date();
+    var today = t.getFullYear() + '-' + pad(t.getMonth() + 1) + '-' + pad(t.getDate());
+    $$('input[type="date"]').forEach(function (d) { d.min = today; });
+
+    /* ----- rooms: live total + prefilled message ----- */
+    function roomCalc(box) {
+      var rate   = Number(box.getAttribute('data-rate')) || 0;
+      var nights = Math.max(1, Number($('[data-bk-nights]', box).value) || 1);
+      var sub    = rate * nights;
+      var gst    = Math.round(sub * 0.05);
+      return { rate: rate, nights: nights, sub: sub, gst: gst, total: sub + gst,
+               inDate: $('[data-bk-in]', box).value,
+               guests: $('[data-bk-guests]', box).value };
+    }
+
+    $$('[data-bk]').forEach(function (box) {
+      var card = box.closest('.room');
+      var out  = $('[data-bk-total]', card);
+      var update = function () {
+        var c = roomCalc(box);
+        if (c.nights > 1 || c.inDate) {
+          out.hidden = false;
+          out.textContent = c.nights + (c.nights > 1 ? ' nights' : ' night') +
+            ' · ' + money(c.sub) + ' + ' + money(c.gst) + ' GST = ' + money(c.total);
+        } else {
+          out.hidden = true;
+        }
+      };
+      $$('input, select', box).forEach(function (f) {
+        f.addEventListener('change', update);
+        f.addEventListener('input', update);
+      });
+      update();
+    });
+
+    document.addEventListener('click', function (e) {
+      var el = e.target.closest ? e.target.closest('[data-wa]') : null;
+      if (!el) return;
+      var kind = el.getAttribute('data-wa');
+
+      if (kind === 'room') {
+        var box = $('[data-bk]', el.closest('.room'));
+        var c = roomCalc(box);
+        var outIso = c.inDate ? addDays(c.inDate, c.nights) : '';
+        send(el, [
+          'Hi Fortune Vista Stay Inn, I would like to book a room.',
+          '',
+          'Room: ' + box.getAttribute('data-room'),
+          'Check-in: '  + (c.inDate ? prettyDate(c.inDate) : 'to be confirmed'),
+          'Check-out: ' + (outIso ? prettyDate(outIso) : 'to be confirmed'),
+          'Nights: ' + c.nights,
+          'Guests: ' + c.guests,
+          '',
+          'Tariff: ' + money(c.rate) + ' x ' + c.nights + ' = ' + money(c.sub),
+          'GST (5%): ' + money(c.gst),
+          'Approx total: ' + money(c.total),
+          '',
+          'Please confirm availability.'
+        ]);
+        return;
+      }
+
+      if (kind === 'event') {
+        var b = $('[data-bk-event]');
+        if (!b) return;
+        send(el, [
+          'Hi Fortune Vista Stay Inn, I would like a quote for Vedika Banquet Hall.',
+          '',
+          'Occasion: ' + $('[data-ev-type]', b).value,
+          'Date: '     + (prettyDate($('[data-ev-date]', b).value) || 'to be confirmed'),
+          'Guests: '   + ($('[data-ev-guests]', b).value || 'to be confirmed'),
+          'Catering: ' + ($('[data-ev-catering]', b).checked ? 'Yes, from your kitchen' : 'Not required'),
+          '',
+          'Please share availability and pricing.'
+        ]);
+        return;
+      }
+
+      if (kind === 'cater') {
+        var k = $('[data-bk-cater]');
+        if (!k) return;
+        send(el, [
+          'Hi Sampradhaya Spicy Kitchen, I would like a catering quote.',
+          '',
+          'For: '        + $('[data-ct-type]', k).value,
+          'Date: '       + (prettyDate($('[data-ct-date]', k).value) || 'to be confirmed'),
+          'Plates: '     + ($('[data-ct-qty]', k).value || 'to be confirmed'),
+          'Preference: ' + $('[data-ct-pref]', k).value,
+          '',
+          'Please share menu options and pricing.'
+        ]);
+      }
+    });
+  })();
+
   /* ---------- catering menu ---------- */
   var MENU = [
     { c: 'Biryani', items: [
