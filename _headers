@@ -1,4 +1,10 @@
-# Fingerprint-free assets, so cache hard and let a rename bust it.
+# NOTE: when several rules match a path, Cloudflare applies ALL of them and
+# concatenates repeated headers. So Cache-Control must never appear in the
+# /* catch-all, or it gets prepended to the asset rules and the browser takes
+# the first max-age it sees (0), defeating the long cache entirely.
+# Keep /* for security headers only.
+
+# Content-addressed by filename: a change means a new filename.
 /assets/img/*
   Cache-Control: public, max-age=31536000, immutable
 
@@ -12,8 +18,18 @@
 /assets/js/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 
-/*
+# HTML must always revalidate so edits go live immediately.
+/
   Cache-Control: public, max-age=0, must-revalidate
+
+/index.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+/404.html
+  Cache-Control: public, max-age=0, must-revalidate
+
+# Security headers only. No Cache-Control here (see note above).
+/*
   X-Content-Type-Options: nosniff
   Referrer-Policy: strict-origin-when-cross-origin
   X-Frame-Options: SAMEORIGIN
