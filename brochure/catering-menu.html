@@ -1,0 +1,526 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sampradhaya Spicy Kitchen — Banquet Menu</title>
+<meta name="robots" content="noindex">
+<style>
+/* ============================================================
+   Sampradhaya Spicy Kitchen — printable banquet menu
+   A4 portrait, two pages, prints as one double-sided sheet.
+   ============================================================ */
+
+@font-face{
+  font-family:"Fraunces"; font-style:normal; font-weight:500 700; font-display:swap;
+  src:url("../assets/fonts/fraunces-latin.woff2") format("woff2");
+}
+
+:root{
+  --paper:#FFFDF6;        /* ivory stock */
+  --paper-tint:#FAF4E6;   /* bands */
+  --ink:#16203A;
+  --navy:#102145;
+  --gold:#B8882A;         /* a touch deeper than screen gold; holds up on paper */
+  --gold-soft:#E3CF9B;
+  --rule:#E0D5BE;
+  --muted:#6E6A5F;
+  --f-dis:"Fraunces","Iowan Old Style",Georgia,serif;
+  --f-ui:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html,body{margin:0; padding:0}
+body{
+  background:#6E6A62;
+  font-family:var(--f-ui); color:var(--ink);
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ---------- the sheet ---------- */
+.sheet{
+  position:relative;
+  width:210mm; height:297mm;
+  padding:12mm 12mm 10mm;
+  margin:8mm auto;
+  background:var(--paper);
+  overflow:hidden;
+  display:flex; flex-direction:column;
+  box-shadow:0 4mm 12mm rgba(0,0,0,.35);
+}
+
+/* ---------- masthead ---------- */
+.mast{display:flex; align-items:center; gap:7mm; padding-bottom:5mm}
+.mast__mark{width:30mm; height:30mm; flex:0 0 auto; display:block}
+.mast__txt{flex:1; min-width:0}
+.kicker{
+  margin:0 0 1.6mm; font-size:6.6pt; font-weight:700;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--gold);
+}
+.mast h1{
+  margin:0; font-family:var(--f-dis); font-weight:600;
+  font-size:23pt; line-height:1.04; letter-spacing:-.015em; color:var(--navy);
+}
+.mast__sub{
+  margin:2mm 0 0; font-size:9.4pt; font-weight:600; letter-spacing:.015em; color:var(--ink);
+}
+.mast__note{margin:1.2mm 0 0; font-size:7.6pt; color:var(--muted); line-height:1.45}
+
+.band{height:.7mm; background:linear-gradient(90deg,var(--gold),var(--gold-soft) 55%,transparent); margin-bottom:4.5mm}
+
+/* ---------- enquiry fields ---------- */
+.fields{display:grid; gap:2.6mm 5mm; margin-bottom:5mm}
+.fields__row{display:grid; gap:5mm}
+.fields__row--a{grid-template-columns:2fr 1fr 1.3fr}
+.fields__row--b{grid-template-columns:2fr .8fr .9fr 1.3fr}
+.f{display:flex; align-items:baseline; gap:2mm; min-width:0}
+.f > span{
+  flex:0 0 auto; font-size:6.6pt; font-weight:750;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--muted);
+}
+.f::after{content:""; flex:1 1 auto; border-bottom:.35mm dotted #BFB49A; height:3.4mm}
+
+/* ---------- a course block ---------- */
+.course{margin-bottom:3.8mm; break-inside:avoid}
+.course__head{display:flex; align-items:center; gap:3mm; margin-bottom:2.4mm}
+.course__head h2{
+  margin:0; flex:0 0 auto; font-family:var(--f-dis); font-weight:650;
+  font-size:11pt; letter-spacing:.005em; color:var(--navy);
+}
+.course__head .pick{
+  flex:0 0 auto; font-size:6.8pt; font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--gold);
+  border:.3mm solid var(--gold-soft); border-radius:999px; padding:.6mm 2mm;
+}
+.course__head::after{content:""; flex:1 1 auto; height:.3mm; background:var(--rule)}
+
+.items{list-style:none; margin:0; padding:0; column-gap:5mm}
+.items li{
+  break-inside:avoid; display:flex; align-items:flex-start; gap:1.8mm;
+  font-size:8.1pt; line-height:1.3; padding:.75mm 0; color:var(--ink);
+}
+.items li::before{
+  content:""; flex:0 0 auto; width:2.5mm; height:2.5mm; margin-top:.75mm;
+  border:.35mm solid var(--gold); border-radius:.5mm; background:#fff;
+}
+.items--2{column-count:2}
+.items--3{column-count:3}
+.items--4{column-count:4}
+.items--5{column-count:5}
+
+/* courses side by side */
+.pair{display:grid; grid-template-columns:1fr 1fr; gap:6mm; margin-bottom:3.8mm}
+.trio{display:grid; grid-template-columns:repeat(3,1fr); gap:6mm; margin-bottom:3.8mm}
+.pair .course, .trio .course{margin-bottom:0}
+
+/* ---------- "also at Fortune Vista" panel, foot of page 1 ---------- */
+.also{
+  margin-top:auto; background:var(--paper-tint); border:.35mm solid var(--rule);
+  border-radius:2mm; padding:4.5mm 5mm 4mm;
+}
+.also h2{
+  margin:0 0 3.4mm; font-family:var(--f-dis); font-weight:650; font-size:11pt;
+  color:var(--navy); display:flex; align-items:center; gap:3mm;
+}
+.also h2::after{content:""; flex:1 1 auto; height:.3mm; background:var(--gold-soft)}
+.also__grid{display:grid; grid-template-columns:repeat(3,1fr); gap:5mm; margin-bottom:4mm}
+.also__grid span{
+  display:block; margin-bottom:1.4mm; font-size:7pt; font-weight:750;
+  letter-spacing:.12em; text-transform:uppercase; color:var(--gold);
+}
+.also__grid p{margin:0; font-size:8pt; line-height:1.45; color:var(--ink)}
+.also__cta{
+  margin:0; padding-top:3.4mm; border-top:.35mm solid var(--rule);
+  font-size:8.4pt; color:var(--muted); text-align:center;
+}
+.also__cta strong{font-family:var(--f-dis); font-size:10pt; color:var(--navy)}
+
+/* ---------- page 2 running head ---------- */
+.runhead{display:flex; align-items:center; gap:4mm; padding-bottom:3mm; margin-bottom:4mm;
+  border-bottom:.35mm solid var(--rule)}
+.runhead img{width:13mm; height:13mm; flex:0 0 auto}
+.runhead strong{font-family:var(--f-dis); font-size:12pt; font-weight:650; color:var(--navy)}
+.runhead span{margin-left:auto; font-size:7.2pt; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--muted)}
+
+/* ---------- included strip ---------- */
+.included{
+  margin-top:auto; background:var(--paper-tint); border:.35mm solid var(--rule);
+  border-radius:2mm; padding:3.2mm 4.5mm;
+}
+.included h3{
+  margin:0 0 1.4mm; font-size:7pt; font-weight:750; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--gold);
+}
+.included p{margin:0; font-size:8.1pt; line-height:1.5; color:var(--ink)}
+
+/* ---------- footer ---------- */
+.foot{
+  display:grid; grid-template-columns:auto 1fr auto; align-items:center; gap:7mm;
+  margin-top:4mm; padding-top:3.6mm; border-top:.6mm solid var(--navy);
+}
+.foot__partner{text-align:left}
+.foot__partner span{
+  display:block; margin-bottom:1.8mm; font-size:6.4pt; font-weight:750;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--muted);
+}
+.foot__partner img{width:36mm; height:auto; display:block}
+.foot__addr{font-size:8pt; line-height:1.55; color:var(--ink)}
+.foot__addr strong{display:block; font-family:var(--f-dis); font-size:9.6pt;
+  font-weight:650; color:var(--navy); margin-bottom:1mm}
+.foot__addr em{font-style:normal; color:var(--muted)}
+.foot__qr{text-align:center}
+.foot__qr img{width:21mm; height:21mm; display:block; margin:0 auto 1.2mm}
+.foot__qr span{font-size:6.2pt; font-weight:700; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--muted)}
+
+/* ---------- screen-only control ---------- */
+.toolbar{
+  position:fixed; left:0; right:0; top:0; z-index:10; display:flex; justify-content:center;
+  gap:10px; padding:10px; background:rgba(22,32,58,.92); color:#fff;
+  font-size:13px; font-family:var(--f-ui);
+}
+.toolbar button{
+  font:inherit; font-weight:650; cursor:pointer; border:0; border-radius:999px;
+  padding:7px 18px; background:var(--gold); color:#2A1D00;
+}
+body{padding-top:52px}
+
+/* ---------- print ---------- */
+@page{size:A4 portrait; margin:0}
+@media print{
+  html,body{background:#fff; padding:0}
+  .toolbar{display:none}
+  .sheet{margin:0; box-shadow:none; break-after:page}
+  .sheet:last-child{break-after:auto}
+  *{-webkit-print-color-adjust:exact; print-color-adjust:exact}
+}
+</style>
+</head>
+<body>
+
+<div class="toolbar">
+  <span>A4 · 2 pages · print double-sided</span>
+  <button onclick="window.print()">Print / Save as PDF</button>
+</div>
+
+<!-- ═══════════════════════ PAGE 1 ═══════════════════════ -->
+<div class="sheet">
+
+  <header class="mast">
+    <img class="mast__mark" src="img/sampradhaya.png" alt="Sampradhaya Spicy Kitchen">
+    <div class="mast__txt">
+      <p class="kicker">Southern Cuisine · Hafeezpet, Hyderabad</p>
+      <h1>Sampradhaya Spicy Kitchen</h1>
+      <p class="mast__sub">Banquet &amp; Event Catering Menu</p>
+      <p class="mast__note">Cooked in our own kitchen by professional chefs. Tick your selection in each
+        course and hand this back to us, or send us a photo on WhatsApp.</p>
+    </div>
+  </header>
+  <div class="band"></div>
+
+  <section class="fields">
+    <div class="fields__row fields__row--a">
+      <label class="f"><span>Guest name</span></label>
+      <label class="f"><span>Date</span></label>
+      <label class="f"><span>Mobile</span></label>
+    </div>
+    <div class="fields__row fields__row--b">
+      <label class="f"><span>Venue</span></label>
+      <label class="f"><span>Pax</span></label>
+      <label class="f"><span>Time</span></label>
+      <label class="f"><span>Seating type</span></label>
+    </div>
+  </section>
+
+  <section class="course">
+    <div class="course__head"><h2>Welcome Drink</h2><span class="pick">Choose 1</span></div>
+    <ul class="items items--3">
+      <li>Chef's choice of the day</li>
+    </ul>
+  </section>
+
+  <section class="course">
+    <div class="course__head"><h2>Hot Items</h2></div>
+    <ul class="items items--4">
+      <li>Masala vada</li>
+      <li>Mirchi bajji</li>
+      <li>Assorted bajji</li>
+      <li>Cut bonda</li>
+      <li>Aloo bonda</li>
+      <li>Palak vada</li>
+      <li>Aratikaya bajji</li>
+      <li>Tamalapaku bajji</li>
+      <li>Capsicum bajji</li>
+      <li>Corn samosa</li>
+      <li>Fried idly</li>
+      <li>Bread pakodi</li>
+      <li>Bread bajji</li>
+      <li>Cut mirchi</li>
+      <li>Aloo green peas samosa</li>
+      <li>Moong dal wada</li>
+      <li>Medu wada</li>
+      <li>Garelu</li>
+      <li>Aloo chana dal wada</li>
+    </ul>
+  </section>
+
+  <div class="trio">
+    <section class="course">
+      <div class="course__head"><h2>Salads</h2></div>
+      <ul class="items">
+        <li>Green salad</li>
+        <li>Aloo chana chaat</li>
+        <li>Tossed salad</li>
+        <li>Veg Hawaiian salad</li>
+        <li>Chana chaat</li>
+        <li>Kimchi salad</li>
+      </ul>
+    </section>
+    <section class="course">
+      <div class="course__head"><h2>Indian Bread</h2></div>
+      <ul class="items">
+        <li>Roti</li>
+        <li>Phulka</li>
+        <li>Butter naan</li>
+        <li>Tandoori roti</li>
+        <li>Rumali roti</li>
+        <li>Puri</li>
+      </ul>
+    </section>
+    <section class="course">
+      <div class="course__head"><h2>Raitha</h2></div>
+      <ul class="items">
+        <li>Perugu pachadi</li>
+        <li>Onion</li>
+        <li>Mix veg</li>
+        <li>Pudina</li>
+        <li>Boondi</li>
+      </ul>
+    </section>
+  </div>
+
+  <section class="course">
+    <div class="course__head"><h2>Flavoured Rice</h2></div>
+    <ul class="items items--3">
+      <li>Andhra veg pulao / biryani</li>
+      <li>Veg dum biryani</li>
+      <li>Coconut pulao</li>
+      <li>Veg nilgiri pulao</li>
+      <li>Tomato mango pulao</li>
+      <li>Capsicum bath</li>
+      <li>Mutter pulao</li>
+      <li>Veg soft noodles <em>(up to 150 pax)</em></li>
+      <li>Veg fried rice <em>(up to 150 pax)</em></li>
+      <li>Mango pulihora</li>
+      <li>Biryani masala rice</li>
+      <li>Pulihora</li>
+      <li>Lemon rice</li>
+      <li>Jeera pulao</li>
+      <li>Karivepaku rice</li>
+      <li>Tomato dum pulao</li>
+      <li>Kothmir dum pulao</li>
+    </ul>
+  </section>
+
+  <section class="course">
+      <div class="course__head"><h2>Dal</h2></div>
+      <ul class="items items--4">
+        <li>Mix veg dal</li>
+        <li>Mango dal</li>
+        <li>Tomato pappu</li>
+        <li>Dal panchrangi</li>
+        <li>Nellore pappu</li>
+        <li>Tomato pesara pappu</li>
+        <li>Dal fry</li>
+        <li>Palakoora pappu</li>
+        <li>Dal tadka</li>
+        <li>Gongura pappu</li>
+        <li>Anapakaya pappu</li>
+        <li>Dosakaya pappu</li>
+        <li>Beerakaya pappu</li>
+        <li>Mudda pappu</li>
+      </ul>
+  </section>
+
+  <section class="also">
+    <h2>Also at Fortune Vista Stay Inn</h2>
+    <div class="also__grid">
+      <div>
+        <span>Vedika Banquet Hall</span>
+        <p>A pillared, fully air-conditioned hall for 100 to 150 guests, with stage
+           d&eacute;cor, seating and sound handled in-house.</p>
+      </div>
+      <div>
+        <span>Outdoor Functions</span>
+        <p>We cater anywhere in the city. Menus are costed and customised to your
+           guest count, with bulk orders welcome.</p>
+      </div>
+      <div>
+        <span>41 Rooms On Site</span>
+        <p>Superior, Deluxe and Twin Bed Executive rooms at the same address for
+           your out-of-town guests.</p>
+      </div>
+    </div>
+    <p class="also__cta">To book the hall or get a catering quote, call
+      <strong>+91 96406 12413</strong> &nbsp;·&nbsp; fortunevistahotels.com</p>
+  </section>
+
+</div>
+
+<!-- ═══════════════════════ PAGE 2 ═══════════════════════ -->
+<div class="sheet">
+
+  <header class="runhead">
+    <img src="img/sampradhaya.png" alt="">
+    <strong>Sampradhaya Spicy Kitchen</strong>
+    <span>Banquet Menu · Page 2</span>
+  </header>
+
+  <section class="course">
+    <div class="course__head"><h2>Veg Curry</h2></div>
+    <ul class="items items--3">
+      <li>Kanda bachali</li>
+      <li>Drumstick pesara punukulu curry</li>
+      <li>Bangaladumpa kurma</li>
+      <li>Mix veg kurma</li>
+      <li>Gutti vankai</li>
+      <li>Veg manchurian (wet)</li>
+      <li>Dappalam</li>
+      <li>Veg chettinad nilgiri korma</li>
+      <li>Veg makhani</li>
+      <li>Subji kolhapuri</li>
+      <li>Aloo mutter</li>
+      <li>Munagakada masala</li>
+      <li>Chikkudukai tomato curry</li>
+      <li>Vankai green peas curry</li>
+      <li>Phool makhani korma</li>
+      <li>Gobi mutter korma</li>
+      <li>Kadai veg</li>
+      <li>Gongura phool makhani drumstick</li>
+      <li>Meal maker curry</li>
+      <li>Wada pulusu</li>
+      <li>Bendakaya masala</li>
+      <li>Pesara punugulu pulusu</li>
+      <li>Gutti dondakaya</li>
+      <li>Beerakai chana curry</li>
+      <li>Perugu vankai</li>
+      <li>Vankai gongura dosakaya</li>
+      <li>Sorakaya masala</li>
+      <li>Dosakaya masala</li>
+      <li>Gummadikaya iguru</li>
+      <li>Aloo palak</li>
+      <li>Dum aloo</li>
+      <li>Aratikaya kaarapu pulusu</li>
+      <li>Aloo tomato kurma</li>
+      <li>Dosakaya pakodi curry</li>
+      <li>Sorakaya dappalam</li>
+      <li>Gobi musallam</li>
+      <li>Mango kaju curry <em>(special)</em></li>
+      <li>Vankaya bangaladumpa curry</li>
+      <li>Nizami sabji</li>
+      <li>Aloo makhani</li>
+      <li>Aloo menthukura korma</li>
+    </ul>
+  </section>
+
+  <section class="course">
+    <div class="course__head"><h2>Veg Dry</h2></div>
+    <ul class="items items--3">
+      <li>Bhendi peanut fry</li>
+      <li>Vankai bathani iguru</li>
+      <li>Mix veg poriyal</li>
+      <li>Aloo vepudu</li>
+      <li>Dondakai boondi</li>
+      <li>Vankai pakoda</li>
+      <li>Bhendi iguru</li>
+      <li>Kanda fry</li>
+      <li>Chama dumpala vepudu</li>
+      <li>Aloo 65</li>
+      <li>Gobi 65</li>
+      <li>Chikkudukai iguru</li>
+      <li>Aloo kara curry</li>
+      <li>Muva vankai</li>
+      <li>Bhendakai pakodi</li>
+      <li>Dondakai pakodi</li>
+      <li>Muva dondakai</li>
+      <li>Cabbage beans foogath</li>
+      <li>Bangaladumpa pachikaram</li>
+      <li>Chikkudukai aloo vepudu</li>
+      <li>Aratikaya vepudu</li>
+      <li>Bendakaya fry</li>
+      <li>Bangaladumpa bobbarlu vepudu</li>
+      <li>Aloo sticks fry</li>
+      <li>Menthukoora bangaladumpa vepudu</li>
+      <li>Cabbage vepudu</li>
+      <li>Aratikaya aloo fry</li>
+      <li>Aratikaya palakura fry</li>
+      <li>Bangaladumpa bendakaya fry</li>
+    </ul>
+  </section>
+
+  <section class="course">
+    <div class="course__head"><h2>Desserts</h2></div>
+    <ul class="items items--4">
+      <li>Gulab jamun</li>
+      <li>Kala jamun</li>
+      <li>Chum chum</li>
+      <li>Moong dal halwa</li>
+      <li>Gajar ka halwa</li>
+      <li>Sorakaya halwa</li>
+      <li>Jilebi</li>
+      <li>Burelu</li>
+      <li>Honeydew</li>
+      <li>Rasgulla</li>
+      <li>Rajbhog</li>
+      <li>Chakkara pongali</li>
+      <li>Rawa kesari</li>
+      <li>Bread halwa</li>
+      <li>Madatha kaja</li>
+      <li>Kakinada kaja</li>
+      <li>Badushah</li>
+      <li>Besan laddu</li>
+      <li>Boondi laddu</li>
+      <li>Bobbatlu</li>
+      <li>Bengali sweets</li>
+      <li>Putharekulu</li>
+    </ul>
+  </section>
+
+  <section class="course">
+    <div class="course__head"><h2>Ice Cream</h2></div>
+    <ul class="items items--5">
+      <li>Vanilla</li>
+      <li>Strawberry</li>
+      <li>Chocolate</li>
+      <li>Pista</li>
+      <li>Pineapple</li>
+    </ul>
+  </section>
+
+  <div class="included">
+    <h3>Every menu includes</h3>
+    <p>Plain rice · Roti pachadi · Ghee · Pickle · Sambar · Rasam · Papad · Vadiyalu · Curd · Paan</p>
+  </div>
+
+  <footer class="foot">
+    <div class="foot__partner">
+      <span>Managing Partner</span>
+      <img src="img/fortune-vista.png" alt="Fortune Vista Stay Inn">
+    </div>
+    <div class="foot__addr">
+      <strong>+91 96406 12413</strong>
+      3-552, SEB Nagar, Near Kothaguda X Road,<br>
+      Aditya Nagar, Hafeezpet, Hyderabad, Telangana 500049<br>
+      <em>fortunevistahotels.com · Reception open 24 hours</em>
+    </div>
+    <div class="foot__qr">
+      <img src="img/location-qr.svg" alt="QR code to our location on Google Maps">
+      <span>Scan for directions</span>
+    </div>
+  </footer>
+
+</div>
+
+</body>
+</html>
