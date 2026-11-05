@@ -15,23 +15,29 @@ python3 -m http.server 8000
 
 (Opening `index.html` directly via `file://` also works, except the Google Maps embed.)
 
-## Deploying to Cloudflare Pages
+## Deploying to Cloudflare
 
-This folder **is** the build output. There is nothing to compile.
+This folder **is** the deployable site. There is nothing to compile, so the
+build command is always empty.
 
-- Wrangler: `npx wrangler pages deploy .`
-- Or Pages dashboard: connect the repo, leave the build command empty,
-  set the output directory to `/`.
+**Workers (what the dashboard offers by default)** — `wrangler.jsonc` declares
+the repo root as the assets directory and serves `404.html` for unmatched
+paths. In the dashboard: leave *Build command* empty, keep the deploy command
+as `npx wrangler deploy`. Locally: `npx wrangler deploy`.
 
-`_headers` and `_redirects` are read by Cloudflare Pages automatically.
-Remember to point `robots.txt`, `sitemap.xml` and the `<link rel="canonical">`
-plus the Open Graph URLs in `index.html` at the final domain.
+**Pages (the legacy workflow)** — connect the repo, leave the build command
+empty, set the build output directory to `/`. Or `npx wrangler pages deploy .`
+
+`_headers` and `_redirects` are honoured by both. Remember to point
+`robots.txt`, `sitemap.xml` and the `<link rel="canonical">` plus the Open
+Graph URLs in `index.html` at the final domain.
 
 ## Layout
 
 ```
 index.html              the whole page
 404.html                not-found page (Cloudflare serves this automatically)
+wrangler.jsonc          Workers deploy config (assets-only)
 _headers                cache + security headers
 _redirects              /menu, /rooms, /banquet ... to the matching anchor
 robots.txt, sitemap.xml

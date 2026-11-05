@@ -1,0 +1,12 @@
+{
+  // Static-assets-only Worker: there is no server code, just files.
+  "name": "fortunevistahotelswebsite",
+  "compatibility_date": "2026-11-05",
+  "assets": {
+    // The repo root is the site itself, so there is nothing to build.
+    "directory": ".",
+    // Serve 404.html for unmatched paths (this is a multi-section
+    // one-pager, not an SPA, so do NOT use "single-page-application").
+    "not_found_handling": "404-page"
+  }
+}
