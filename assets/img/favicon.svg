@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+<rect width="64" height="64" rx="14" fill="#102145"/>
+<path d="M32 13c3.2-4.2 10-2.4 10 3 0 3.1-2.3 5.2-5.6 5.9 3.3.7 5.6 2.8 5.6 5.9 0 5.4-6.8 7.2-10 3-3.2 4.2-10 2.4-10-3 0-3.1 2.3-5.2 5.6-5.9-3.3-.7-5.6-2.8-5.6-5.9 0-5.4 6.8-7.2 10-3z" fill="#2E9B4F"/>
+<text x="32" y="54" font-family="Georgia,serif" font-size="22" font-weight="700" fill="#E6C572" text-anchor="middle">FV</text>
+</svg>
