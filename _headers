@@ -18,6 +18,14 @@
 /assets/js/*
   Cache-Control: public, max-age=86400, stale-while-revalidate=604800
 
+# Brochure logos and QR never change in place; the PDF is reprinted now and
+# then, so it revalidates daily rather than being pinned for a year.
+/brochure/img/*
+  Cache-Control: public, max-age=31536000, immutable
+
+/brochure/Sampradhaya-Catering-Menu.pdf
+  Cache-Control: public, max-age=86400, stale-while-revalidate=604800
+
 # HTML must always revalidate so edits go live immediately.
 /
   Cache-Control: public, max-age=0, must-revalidate
