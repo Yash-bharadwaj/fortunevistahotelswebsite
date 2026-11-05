@@ -506,6 +506,13 @@ svg use[href="#i-wa"]{fill:currentColor; stroke:none}
 .foot__bar{display:flex; flex-wrap:wrap; justify-content:space-between; gap:10px;
   margin-top:40px; padding-block:20px; border-top:1px solid rgba(255,255,255,.1); font-size:.82rem; color:#7D8CA5}
 .foot__bar p{margin:0}
+.foot__credit a{color:#A9B5C9; font-weight:650; border-bottom:1px solid rgba(200,153,46,.45);
+  padding-bottom:1px; transition:color .2s, border-color .2s}
+.foot__credit a:hover, .foot__credit a:focus-visible{color:var(--gold-300);
+  border-color:var(--gold-300)}
+@media(max-width:800px){
+  .foot__bar{flex-direction:column; align-items:flex-start; gap:8px}
+}
 
 /* ---------- mobile dock ---------- */
 .dock{display:none}
