@@ -9,13 +9,26 @@
 
   /* ---------- sticky nav ---------- */
   var nav = $('#nav');
-  var onScroll = function () { nav.classList.toggle('is-stuck', window.scrollY > 8); };
+  /* The drawer starts below the header. The top bar scrolls away, so the
+     header's bottom edge moves; publish it as --navh and keep it current. */
+  var setNavH = function () {
+    document.documentElement.style.setProperty(
+      '--navh', Math.round(nav.getBoundingClientRect().bottom) + 'px');
+  };
+  var onScroll = function () {
+    nav.classList.toggle('is-stuck', window.scrollY > 8);
+    setNavH();
+  };
+  setNavH();
   onScroll();
   window.addEventListener('scroll', onScroll, { passive: true });
+  window.addEventListener('resize', setNavH);
+  window.addEventListener('orientationchange', setNavH);
 
   /* ---------- mobile drawer ---------- */
   var burger = $('#burger'), menu = $('#menu');
   var setMenu = function (open) {
+    if (open) setNavH();
     menu.classList.toggle('is-open', open);
     burger.setAttribute('aria-expanded', String(open));
     document.body.classList.toggle('is-locked', open);
